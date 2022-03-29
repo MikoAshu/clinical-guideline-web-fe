@@ -1,0 +1,44 @@
+[
+    {
+        "Description": null,
+        "Id": 1,
+        "NodeName": "Adult Symptom",
+        "NodeTypeCode": "ASMPT",
+        "rowguid": "7aaaed13-4567-42f7-960e-4959fb07f05d"
+    },
+    {
+        "Description": null,
+        "Id": 2,
+        "NodeName": "Child Symptom",
+        "NodeTypeCode": "CSMPT",
+        "rowguid": "46182a87-38aa-4c4e-ab1e-0fb87d3562a4"
+    },
+    {
+        "Description": null,
+        "Id": 3,
+        "NodeName": "URGENT",
+        "NodeTypeCode": "URGNT",
+        "rowguid": "9de796ce-94e5-47f3-b8a8-73579a079de1"
+    },
+    {
+        "Description": null,
+        "Id": 4,
+        "NodeName": "Not Urgent",
+        "NodeTypeCode": "NTURG",
+        "rowguid": "a671476c-0c75-4364-a064-a56e3d098dbc"
+    },
+    {
+        "Description": null,
+        "Id": 5,
+        "NodeName": "Algorithm",
+        "NodeTypeCode": "ALGTM",
+        "rowguid": "a2e7f5b0-5086-498e-a636-42d34c09ac9b"
+    },
+    {
+        "Description": null,
+        "Id": 6,
+        "NodeName": "Chronic",
+        "NodeTypeCode": "CHRNC",
+        "rowguid": "1e98fe61-6186-442d-a107-6b84c636f817"
+    }
+]
