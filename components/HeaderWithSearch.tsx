@@ -49,19 +49,10 @@ interface HeaderSearchProps {
   links: { link: string; label: string }[];
 }
 
-export function HeaderSearch({ links }: HeaderSearchProps , searchData: (string | AutocompleteItem)[] = []) {
+export function HeaderSearch({ links }: HeaderSearchProps ) {
   const [opened, toggleOpened] = useBooleanToggle(false);
   const { classes } = useStyles();
-  Transport.HTTP.getAllNodes()
-    .then((res: any) => {
-      res.data.map((element: any) => {
-        if (element.NodeTypeId === 1 || element.NodeTypeId === 2 || element.NodeTypeId === 6) {
-            searchDataO.push(element.Name)
-        }
-    });
-    })
-    .catch((error) => console.log(error.message));
-  var searchDataO = searchData.length > 0 ? searchData : ['Abdominal Pain', 'Abdominal symptoms', 'Abnormal thoughts/behavior', 'Abnormal Vaginal Bleeding']
+
   const items = links.map((link) => (
     <a
       key={link.label}
@@ -86,12 +77,6 @@ export function HeaderSearch({ links }: HeaderSearchProps , searchData: (string 
           <Group ml={50} spacing={5} className={classes.links}>
             {items}
           </Group>
-          <Autocomplete
-            className={classes.search}
-            placeholder="Search"
-            icon={<Search size={16} />}
-            data={searchDataO}
-          />
         </Group>
       </div>
     </Header>

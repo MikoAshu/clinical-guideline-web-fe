@@ -1,6 +1,6 @@
 import React from 'react';
-import { Navbar, Group, Code, ScrollArea, createStyles } from '@mantine/core';
-import { Notes, Frame, BabyCarriage, Man, Old } from 'tabler-icons-react';
+import { Navbar, Group, Code, ScrollArea, createStyles, Autocomplete } from '@mantine/core';
+import { Notes, Frame, BabyCarriage, Man, Old, Search } from 'tabler-icons-react';
 import { Card, Image, Text, Badge, Button, ActionIcon, useMantineTheme } from '@mantine/core';
 import { LinksGroup } from '../components/NavbarLinksGroup';
 import { Logo } from '../components/logo';
@@ -51,6 +51,12 @@ const nodeData = [
 ];
 
 const useStyles = createStyles((theme) => ({
+  search: {
+    width: '100%',
+    [theme.fn.smallerThan('xs')]: {
+      display: 'none',
+    },
+  },
   navbar: {
     backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.white,
     paddingBottom: 0,
@@ -96,7 +102,7 @@ export default function HomePage() {
               label : element.Name,
               link: '/'
             })
-            searchData.push(element.Name)
+            searchDataO.push(element.Name)
 
             if (element.NodeTypeId === 1){
               adultSymptoms.push({
@@ -120,16 +126,23 @@ export default function HomePage() {
     .catch((error) => console.log(error.message));
 
   const links = nodeData.map((item) => <LinksGroup {...item} key={item.label} />);
+  var searchDataO = searchData.length > 0 ? searchData : ['Abdominal Pain', 'Abdominal symptoms', 'Abnormal thoughts/behavior', 'Abnormal Vaginal Bleeding']
 
   return (
     <>
       <HeaderSearch links={[{ links: { link: '', label: '' } }]} searchData={searchData}></HeaderSearch>
       <Navbar height={800} width={{ sm: 300 }} p="md" className={classes.navbar}>
-        {/* <Navbar.Section className={classes.header}>
+        <Navbar.Section className={classes.header}>
         <Group position="apart">
-          <Image src={'../assets/logo.png'} alt={'logo'} width={120} />
+        <Autocomplete
+            className={classes.search}
+            placeholder="Search"
+            icon={<Search size={16} />}
+            data={searchDataO}
+          />
+          {/* <Image src={'../assets/logo.png'} alt={'logo'} width={120} /> */}
         </Group>
-      </Navbar.Section> */}
+      </Navbar.Section>
 
         <Navbar.Section grow className={classes.links} component={ScrollArea}>
           <div className={classes.linksInner}>{links}</div>
