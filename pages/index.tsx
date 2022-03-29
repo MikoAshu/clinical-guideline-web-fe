@@ -1,54 +1,52 @@
 import React from 'react';
 import { Navbar, Group, Code, ScrollArea, createStyles } from '@mantine/core';
-import {
-  Notes,
-  CalendarStats,
-  Gauge,
-  PresentationAnalytics,
-  FileAnalytics,
-  Adjustments,
-  Lock,
-} from 'tabler-icons-react';
+import { Notes, Frame, BabyCarriage, Man, Old } from 'tabler-icons-react';
+import { Card, Image, Text, Badge, Button, ActionIcon, useMantineTheme } from '@mantine/core';
 import { LinksGroup } from '../components/NavbarLinksGroup';
 import { Logo } from '../components/logo';
 import { UserButton } from '../components/UserButton';
-// import { UserButton } from '../UserButton/UserButton';
-// import { LinksGroup } from '../NavbarLinksGroup/NavbarLinksGroup';
-// import { Logo } from './Logo';
+import node from '../assets/Node.json';
+import { HeaderSearch } from '../components/HeaderWithSearch';
+import Transport from '../api/Transport';
 
-const mockdata = [
-  { label: 'Dashboard', icon: Gauge },
+var allSymptoms: {
+  label: string;
+  link: string;
+}[] = [];
+var adultSymptoms: {
+  label: string;
+  link: string;
+}[] = [];
+var childSymptoms: {
+  label: string;
+  link: string;
+}[] = [];
+var chronicCare: {
+  label: string;
+  link: string;
+}[] = [];
+var searchData: string[] = [];
+const nodeData = [
   {
-    label: 'Market news',
-    icon: Notes,
-    initiallyOpened: true,
-    links: [
-      { label: 'Overview', link: '/' },
-      { label: 'Forecasts', link: '/' },
-      { label: 'Outlook', link: '/' },
-      { label: 'Real time', link: '/' },
-    ],
+    label: 'All Symptoms',
+    icon: Frame,
+    initiallyOpened: false,
+    links: allSymptoms
   },
   {
-    label: 'Releases',
-    icon: CalendarStats,
-    links: [
-      { label: 'Upcoming releases', link: '/' },
-      { label: 'Previous releases', link: '/' },
-      { label: 'Releases schedule', link: '/' },
-    ],
+    label: 'Adult Symptoms',
+    icon: Man,
+    links: adultSymptoms
   },
-  { label: 'Analytics', icon: PresentationAnalytics },
-  { label: 'Contracts', icon: FileAnalytics },
-  { label: 'Settings', icon: Adjustments },
   {
-    label: 'Security',
-    icon: Lock,
-    links: [
-      { label: 'Enable 2FA', link: '/' },
-      { label: 'Change password', link: '/' },
-      { label: 'Recovery codes', link: '/' },
-    ],
+    label: 'Child Symptoms',
+    icon: BabyCarriage,
+    links: childSymptoms
+  },
+  {
+    label: 'Chronic Care',
+    icon: Old,
+    links: chronicCare
   },
 ];
 
@@ -90,28 +88,53 @@ const useStyles = createStyles((theme) => ({
 
 export default function HomePage() {
   const { classes } = useStyles();
-  const links = mockdata.map((item) => <LinksGroup {...item} key={item.label} />);
+  Transport.HTTP.getAllNodes()
+    .then((res: any) => {
+      res.data.map((element: any) => {
+        if (element.NodeTypeId === 1 || element.NodeTypeId === 2 || element.NodeTypeId === 6) {
+            allSymptoms.push({
+              label : element.Name,
+              link: '/'
+            })
+            searchData.push(element.Name)
+
+            if (element.NodeTypeId === 1){
+              adultSymptoms.push({
+                label : element.Name,
+                link: '/'
+              })
+            } else if (element.NodeTypeId === 2) {
+              childSymptoms.push({
+                label : element.Name,
+                link: '/'
+              })
+            } else {
+              chronicCare.push({
+                label : element.Name,
+                link: '/'
+              })
+            }
+        }
+    });
+    })
+    .catch((error) => console.log(error.message));
+
+  const links = nodeData.map((item) => <LinksGroup {...item} key={item.label} />);
 
   return (
-    <Navbar height={800} width={{ sm: 300 }} p="md" className={classes.navbar}>
-      <Navbar.Section className={classes.header}>
+    <>
+      <HeaderSearch links={[{ links: { link: '', label: '' } }]} searchData={searchData}></HeaderSearch>
+      <Navbar height={800} width={{ sm: 300 }} p="md" className={classes.navbar}>
+        {/* <Navbar.Section className={classes.header}>
         <Group position="apart">
-          <Logo width={120} />
-          <Code sx={{ fontWeight: 700 }}>v3.1.2</Code>
+          <Image src={'../assets/logo.png'} alt={'logo'} width={120} />
         </Group>
-      </Navbar.Section>
+      </Navbar.Section> */}
 
-      <Navbar.Section grow className={classes.links} component={ScrollArea}>
-        <div className={classes.linksInner}>{links}</div>
-      </Navbar.Section>
-
-      <Navbar.Section className={classes.footer}>
-        <UserButton
-          image="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=255&q=80"
-          name="Ann Nullpointer"
-          email="anullpointer@yahoo.com"
-        />
-      </Navbar.Section>
-    </Navbar>
+        <Navbar.Section grow className={classes.links} component={ScrollArea}>
+          <div className={classes.linksInner}>{links}</div>
+        </Navbar.Section>
+      </Navbar>
+    </>
   );
 }
